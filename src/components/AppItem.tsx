@@ -16,7 +16,7 @@ import { Select,
   SelectTrigger,
   SelectValue
 } from "@/components/ui/select"
-import EnvDialog from "./EnvView"
+import EnvView from "./EnvView"
 import { useState } from "react"
 import { useRepos } from "@/models/repos"
 
@@ -46,7 +46,7 @@ export default function AppItem({ app, env }: { app: number, env: any }) {
           </Select>
           <Button>Build</Button>
         </div>
-        <EnvDialog env={env}/>
+        <EnvView env={env}/>
       </CardContent>
     </Card>
   )

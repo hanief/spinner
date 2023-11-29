@@ -21,6 +21,7 @@ import {
   TableHeader,
   TableRow,
 } from "@/components/ui/table"
+import { Input } from "./ui/input"
 
 export default function EnvView({ env }: { env: any}) {
   return (
@@ -41,7 +42,9 @@ export default function EnvView({ env }: { env: any}) {
                 return (
                   <TableRow key={key}>
                     <TableCell>{key}</TableCell>
-                    <TableCell>{env[key]}</TableCell>
+                    <TableCell>
+                      <Input defaultValue={env[key]} />
+                    </TableCell>
                   </TableRow>
                 )
               })}

@@ -5,8 +5,8 @@ import './globals.css'
 const inter = Inter({ subsets: ['latin'] })
 
 export const metadata: Metadata = {
-  title: 'Dash Dev Deployer',
-  description: 'Deploy dashboard dev app',
+  title: 'Devloyer - Deploy dash-dev app',
+  description: 'Deploy dash-dev app',
 }
 
 export default function RootLayout({
