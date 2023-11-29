@@ -1,16 +1,16 @@
 import Image from 'next/image'
 import { getServerSession } from 'next-auth'
-import { authOptions } from "@/app/api/auth/[...nextauth]/route"
+import { authOptions } from "@/config"
 import LogoutButton from '@/components/ui/LogoutButton'
-import { useApps } from '@/models/apps'
 import AppItem from '@/components/AppItem'
 import { fetchEnvContent } from '@/models/env'
+import { users } from "@/constants/apps"
 
 export default async function Home() {
   const session = await getServerSession(authOptions)
   const userEmail = session?.user?.email
   const isJakpatEmail = userEmail?.split('@')[1] === 'jakpat.net'
-  const { apps } = useApps(userEmail)
+  const apps = users.filter(user => user.email === userEmail).flatMap(user => user.apps)
   const env = await fetchEnvContent(apps[0])
   
   function renderNotJakpat() {
