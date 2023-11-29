@@ -5,7 +5,7 @@ import './globals.css'
 const inter = Inter({ subsets: ['latin'] })
 
 export const metadata: Metadata = {
-  title: 'Devloyer - Deploy dash-dev app',
+  title: 'Dash Dev Deployer',
   description: 'Deploy dash-dev app',
 }
 

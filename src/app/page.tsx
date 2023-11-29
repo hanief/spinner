@@ -12,27 +12,6 @@ export default async function Home() {
   const isJakpatEmail = userEmail?.split('@')[1] === 'jakpat.net'
   const apps = users.filter(user => user.email === userEmail).flatMap(user => user.apps)
   const env = await fetchEnvContent(apps[0])
-  
-  function renderNotJakpat() {
-    return (
-      <div>
-        <p>{userEmail}</p>
-        <p>Sorry, this is internal Jakpat tool. Please sign in using your Jakpat email.</p>
-      </div>
-    )
-  }
-
-  function renderIsJakpat() {
-    return (
-      <div className="w-full">
-        {apps?.map(app => {
-          return (
-            <AppItem key={app} app={app} env={env}/>
-          )
-        })}
-      </div>
-    )
-  }
 
   return (
     <main className="flex min-h-screen flex-col items-center justify-between p-10">
@@ -47,10 +26,13 @@ export default async function Home() {
         <p className='font-bold sm:hidden md:block'>Dash Dev Deployer</p>   
         <LogoutButton />
       </div>
-      {isJakpatEmail ? 
-        renderIsJakpat() : 
-        renderNotJakpat()
-      }
+      <div className="w-full">
+        {apps?.map(app => {
+          return (
+            <AppItem key={app} app={app} env={env}/>
+          )
+        })}
+      </div>
     </main>
   )
 }
