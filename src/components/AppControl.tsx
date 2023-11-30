@@ -14,7 +14,7 @@ export default function AppControl({ app, currentBranch, env }: { app: string, c
     <>
       <div className="flex items-center justify-between">
         <BranchSelector activeBranch={activeBranch} setActiveBranch={setActiveBranch}/>
-        <Button onClick={() => buildApp(app, activeBranch, localEnv)}>Build</Button>
+        <Button disabled={!activeBranch} onClick={() => buildApp(app, activeBranch, localEnv)}>Build</Button>
       </div>
       <EnvViewer env={localEnv} setEnv={setLocalEnv}/>
     </>
