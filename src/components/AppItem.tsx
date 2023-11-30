@@ -6,15 +6,13 @@ import {
   CardTitle,
 } from "@/components/ui/card"
 import Link from "next/link"
-import { Button } from "@/components/ui/button"
-import EnvViewer from "./EnvViewer"
-import BranchSelector from "./BranchSelector"
 import { fetchEnvContent } from '@/models/env'
 import { fetchCurrentBranch } from '@/models/git'
+import AppControl from "./AppControl"
 
-export default async function AppItem({ app }: { app: number }) {
+export default async function AppItem({ app }: { app: string }) {
   const env = await fetchEnvContent(app)
-  const currentBranch = await fetchCurrentBranch(`jakpat-dash-react-${app}`)
+  // const currentBranch = await fetchCurrentBranch(`jakpat-dash-react-${app}`)
 
   return (
     <Card className="my-1 w-full">
@@ -25,11 +23,7 @@ export default async function AppItem({ app }: { app: number }) {
         </CardDescription>
       </CardHeader>
       <CardContent>
-        <div className="flex items-center justify-between">
-          <BranchSelector currentBranch={currentBranch}/>
-          <Button>Build</Button>
-        </div>
-        <EnvViewer env={env}/>
+        <AppControl app={app} currentBranch={''} env={env}/>
       </CardContent>
     </Card>
   )

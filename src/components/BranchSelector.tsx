@@ -1,16 +1,12 @@
-"use client"
-
 import { Select,
   SelectContent,
   SelectItem,
   SelectTrigger,
   SelectValue
 } from "@/components/ui/select"
-import { useState } from "react"
 import { useRepos } from "@/models/repos"
 
-export default function BranchSelector({ currentBranch }: { currentBranch: string}) {
-  const [activeBranch, setActiveBranch] = useState(currentBranch)
+export default function BranchSelector({ activeBranch, setActiveBranch }: { activeBranch: string, setActiveBranch: (value: string) => void}) {
   const { branches, isLoading } = useRepos()
 
   return (

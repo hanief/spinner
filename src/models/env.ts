@@ -1,7 +1,7 @@
 import { readFile } from "fs/promises"
 import dotenv from "dotenv"
 
-export async function fetchEnvContent(appId: number | null | undefined) {
+export async function fetchEnvContent(appId?: string) {
   const filePath = `../container-env/.env.nodejs-dev-project-${appId}`
 
   const file = await readFile(filePath, { encoding: 'utf8' })

@@ -1,5 +1,3 @@
-"use client"
-
 import {
   Accordion,
   AccordionContent,
@@ -16,7 +14,7 @@ import {
 } from "@/components/ui/table"
 import { Input } from "./ui/input"
 
-export default function EnvViewer({ env }: { env: any }) {
+export default function EnvViewer({ env, setEnv }: { env: any, setEnv: (value: unknown) => void }) {
   if (!env) {
     return null
   }
@@ -39,7 +37,7 @@ export default function EnvViewer({ env }: { env: any }) {
                   <TableRow key={key}>
                     <TableCell>{key}</TableCell>
                     <TableCell>
-                      <Input defaultValue={env[key]} />
+                      <Input value={env[key]} onChange={event => setEnv({...env, [key]: event.target.value})}/>
                     </TableCell>
                   </TableRow>
                 )
