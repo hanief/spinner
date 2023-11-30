@@ -12,6 +12,7 @@ import AppControl from "./AppControl"
 
 export default async function AppItem({ app }: { app: string }) {
   const env = await fetchEnvContent(app)
+  // TODO: fix this
   // const currentBranch = await fetchCurrentBranch(`jakpat-dash-react-${app}`)
 
   return (
