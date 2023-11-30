@@ -16,7 +16,7 @@ export default async function Home() {
           src="/jakpat-blue.png"
           alt="Jakpat Logo"
           width={100}
-          height={24}
+          height={20}
           priority
         />
         <p className='font-bold sm:hidden md:block'>Dash Dev Deployer</p>   

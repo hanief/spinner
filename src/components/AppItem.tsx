@@ -7,7 +7,7 @@ import {
 } from "@/components/ui/card"
 import Link from "next/link"
 import { Button } from "@/components/ui/button"
-import EnvView from "./EnvView"
+import EnvViewer from "./EnvViewer"
 import BranchSelector from "./BranchSelector"
 import { fetchEnvContent } from '@/models/env'
 import { fetchCurrentBranch } from '@/models/git'
@@ -29,7 +29,7 @@ export default async function AppItem({ app }: { app: number }) {
           <BranchSelector currentBranch={currentBranch}/>
           <Button>Build</Button>
         </div>
-        <EnvView env={env}/>
+        <EnvViewer env={env}/>
       </CardContent>
     </Card>
   )

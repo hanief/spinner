@@ -9,7 +9,6 @@ import {
 import {
   Table,
   TableBody,
-  TableCaption,
   TableCell,
   TableHead,
   TableHeader,
@@ -17,22 +16,25 @@ import {
 } from "@/components/ui/table"
 import { Input } from "./ui/input"
 
-export default function EnvView({ env }: { env: any}) {
+export default function EnvViewer({ env }: { env: any }) {
+  if (!env) {
+    return null
+  }
+
   return (
     <Accordion type="single" collapsible>
       <AccordionItem value="item-1">
         <AccordionTrigger>Environment Variables</AccordionTrigger>
         <AccordionContent>
           <Table>
-            <TableCaption>Environment Variables</TableCaption>
             <TableHeader>
               <TableRow>
-                <TableHead>Variable</TableHead>
+                <TableHead>Attribute</TableHead>
                 <TableHead>Value</TableHead>
               </TableRow>
             </TableHeader>
             <TableBody>
-              {env && Object.keys(env).map(key => {
+              {Object.keys(env).map(key => {
                 return (
                   <TableRow key={key}>
                     <TableCell>{key}</TableCell>
