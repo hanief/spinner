@@ -31,9 +31,6 @@ export default function RootLayout({
                 priority
               />
             </Link>
-            <Link href="/">
-              <p className='font-bold sm:hidden md:block'>Squad Spinner</p>  
-            </Link> 
             <LogoutButton />
           </div>
           {children}
