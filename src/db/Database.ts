@@ -31,7 +31,7 @@ export async function getWinnersFromSquad(squad: string) {
   return teams
 }
 
-export async function setAsWinner(person: string, squad: string) {
+export async function addWinnerFromSquad(person: string, squad: string) {
   const db = await getDB()
   const today = Date()
   db.data.winners.push({ name: person, date: today, squad: squad })
@@ -39,9 +39,9 @@ export async function setAsWinner(person: string, squad: string) {
   await db.write()
 }
 
-export async function deleteWinner(person: string, squad: string) {
+export async function deleteWinnerFromSquad(person: string, squad: string) {
   const db = await getDB()
-  const newWinners = db.data.winners.filter(winner => winner.name !== person && winner.squad !== squad)
+  const newWinners = db.data.winners.filter(winner => winner.name !== person || winner.squad !== squad)
   db.data.winners = newWinners
 
   await db.write()

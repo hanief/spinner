@@ -9,12 +9,9 @@ import {
   TableHeader,
   TableRow
 } from "@/components/ui/table"
-import { Winner } from "@/types"
 import { isAdmin } from "@/lib/utils"
 import { Button } from "./ui/button"
-import { deleteWinner } from "@/db/Database"
 import { User } from "@/types"
-import { useRouter } from "next/router"
 import { useWinners } from "@/models/winners"
 
 const weeks = [
@@ -27,13 +24,12 @@ const weeks = [
   'Senin'
 ]
 
-export default function WinnerTable({ user }: { user?: User }) {
-  const router = useRouter()
-  const { winners } = useWinners(router.query?.squad as string)
+export default function WinnerTable({ user, squad }: { user?: User, squad: string }) {
+  const { winners, deleteWinner } = useWinners(squad)
   const isUserAdmin = isAdmin(user?.email)
 
   return (
-    <Table className="border mt-3 w-[50vh] mx-auto">
+    <Table className="border mt-6 w-[50vh] mx-auto">
       <TableHeader>
         <TableRow className="border">
           <TableHead>Yang beruntung</TableHead>

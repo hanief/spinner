@@ -1,4 +1,4 @@
-import { getTeamsFromSquad, getWinnersFromSquad } from "@/db/Database"
+import { getTeamsFromSquad } from "@/db/Database"
 import Spinner from "@/components/Spinner"
 import WinnerTable from "@/components/WinnerTable"
 import { getServerSession } from "next-auth"
@@ -12,7 +12,7 @@ export default async function Squad({ params }: { params: { squad: string } }) {
     <div className="w-full flex flex-col items-center">
       <h1 className="text-xl font-bold m-2">Squad {params.squad}</h1>
       <Spinner teams={teams} squad={params?.squad}/>
-      <WinnerTable user={session?.user}/>
+      <WinnerTable user={session?.user} squad={params.squad}/>
     </div>
   )
 }

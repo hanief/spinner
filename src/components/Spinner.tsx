@@ -11,9 +11,7 @@ import { Button } from "@/components/ui/button"
 import { useEffect, useState } from "react"
 import { Wheel } from 'react-custom-roulette'
 import { colors } from "@/constants/colors"
-import { setAsWinner } from "@/db/Database"
-
-const timeout = 2000
+import { useWinners } from "@/models/winners"
 
 export default function Spinner({ teams, squad }: { teams?: string[], squad: string }) {
   const data = teams ? teams?.map(team => ({ option: team })) : []
@@ -21,6 +19,7 @@ export default function Spinner({ teams, squad }: { teams?: string[], squad: str
   const [prizeNumber, setPrizeNumber] = useState(0)
   const [startingOptionIndex, setStartingOptionIndex] = useState(0)
   const [isDialogOpen, setIsDialogOpen] = useState(false)
+  const { winners, addWinner } = useWinners(squad)
 
   useEffect(() => {
     const newStartingOptionIndex = Math.floor(Math.random() * data.length)
@@ -40,7 +39,7 @@ export default function Spinner({ teams, squad }: { teams?: string[], squad: str
     const luckyPerson = teams ? teams[prizeNumber] : null
 
     if (luckyPerson && squad) {
-      setAsWinner(luckyPerson, squad)
+      addWinner(luckyPerson, squad)
     }
   }
 
