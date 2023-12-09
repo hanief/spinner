@@ -13,16 +13,7 @@ import { isAdmin } from "@/lib/utils"
 import { Button } from "./ui/button"
 import { User } from "@/types"
 import { useWinners } from "@/models/winners"
-
-const weeks = [
-  'Senin',
-  'Selasa',
-  'Rabu',
-  'Kamis',
-  'Jumat',
-  'Senin',
-  'Senin'
-]
+import { days } from "@/constants/days"
 
 export default function WinnerTable({ user, squad }: { user?: User, squad: string }) {
   const { winners, deleteWinner } = useWinners(squad)
@@ -41,7 +32,7 @@ export default function WinnerTable({ user, squad }: { user?: User, squad: strin
         {winners?.map(winner => {
           const date = new Date(winner.date)
           const dayOfTheWeek = date.getDay()
-          const hari = weeks[dayOfTheWeek]
+          const hari = days[dayOfTheWeek]
 
           return (
             <TableRow key={winner.date}>

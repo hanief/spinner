@@ -1,6 +1,7 @@
 import useSWR from 'swr'
-import { getWinnersFromSquad, addWinnerFromSquad, deleteWinnerFromSquad } from '@/db/Database'
+import { getWinnersFromSquad, addWinnerFromSquad, deleteWinnerFromSquad, resetWinnersFromSquad } from '@/db/Database'
 import { Winner } from '@/types'
+import { DateTime } from 'luxon'
 
 export function useWinners(squad: string) {
   const { data, mutate } = useSWR(`/winners/${squad}`, async () => {
@@ -9,8 +10,13 @@ export function useWinners(squad: string) {
     return winners.sort((a, b) => a.date > b.date ? -1 : 1)
   })
 
-  async function addWinner(winner: string, squad: string) {
-    const today = Date()
+  async function addWinner(winner: string, squad: string, forTomorrow = false) {
+    const today = DateTime.now()
+    let tomorrow = today
+    if (tomorrow.weekday > 4) {
+      tomorrow = tomorrow.plus({ days: 8 - tomorrow.weekday})
+    }
+    const date = forTomorrow ? tomorrow : today
     
     let newData: Winner[] = []
 
@@ -18,7 +24,7 @@ export function useWinners(squad: string) {
       newData = data
     }
 
-    newData = [...newData, { name: winner, date: today, squad: squad }]
+    newData = [...newData, { name: winner, date: date.toISO(), squad: squad }]
 
     return mutate(
       async () => {
@@ -47,9 +53,26 @@ export function useWinners(squad: string) {
     )
   }
 
+  async function resetWinners(squad: string) {
+    const newData: Winner[] = []
+
+    return mutate(
+      async () => {
+        await resetWinnersFromSquad(squad)
+
+        return newData
+      },
+      {
+        optimisticData: newData
+      }
+    )
+  }
+
+
   return {
     winners: data,
     addWinner,
-    deleteWinner
+    deleteWinner,
+    resetWinners
   }
 }

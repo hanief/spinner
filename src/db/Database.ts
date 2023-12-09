@@ -46,3 +46,11 @@ export async function deleteWinnerFromSquad(person: string, squad: string) {
 
   await db.write()
 }
+
+export async function resetWinnersFromSquad(squad: string) {
+  const db = await getDB()
+  const newWinners = db.data.winners.filter(winner => winner.squad !== squad)
+  db.data.winners = newWinners
+
+  await db.write()
+}

@@ -13,27 +13,27 @@ export const squads = [
       'Andre'
     ]
   },
-  {
-    name: 'survey',
-    teams: [
-      'Alika',
-      'Babay',
-      'Hanief',
-      'Yudi',
-      'Luthfil',
-      'Cipau',
-      'Yazid',
-      'Yusril',
-      'Yosua',
-      'Fia'
-    ]
-  },
-  {
-    name: 'apps',
-    teams: [
-      'Babay',
-      'Angga',
-      'Bangun'
-    ]
-  },
+  // {
+  //   name: 'survey',
+  //   teams: [
+  //     'Alika',
+  //     'Babay',
+  //     'Hanief',
+  //     'Yudi',
+  //     'Luthfil',
+  //     'Cipau',
+  //     'Yazid',
+  //     'Yusril',
+  //     'Yosua',
+  //     'Fia'
+  //   ]
+  // },
+  // {
+  //   name: 'apps',
+  //   teams: [
+  //     'Babay',
+  //     'Angga',
+  //     'Bangun'
+  //   ]
+  // },
 ]

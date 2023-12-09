@@ -1,37 +1,74 @@
 "use client"
 
-import { Dialog,
-  DialogContent,
-  DialogDescription,
-  DialogFooter,
-  DialogHeader,
-  DialogTitle
-} from "@/components/ui/dialog"
 import { Button } from "@/components/ui/button"
 import { useEffect, useState } from "react"
 import { Wheel } from 'react-custom-roulette'
-import { colors } from "@/constants/colors"
 import { useWinners } from "@/models/winners"
+import { days } from "@/constants/days"
+import WinningDialog from "./WinningDialog"
 
 export default function Spinner({ teams, squad }: { teams?: string[], squad: string }) {
-  const data = teams ? teams?.map(team => ({ option: team })) : []
+  const { winners, addWinner, resetWinners } = useWinners(squad)
+  const winnersName = winners?.map(winner => winner.name)
+  const notWinnersName = teams?.filter(team => !winnersName?.includes(team))
+  const isWinners = teams?.map(team => winnersName?.includes(team))
+  const isAllWon = teams && teams?.length > 0 && winnersName?.length === teams?.length
+  const data = teams ? teams?.map(team => {
+    const winner = winners?.find(winner => winner.name === team)
+    let text = team
+    if (winner) {
+      const date = new Date(winner.date)
+      const dayOfTheWeek = date.getDay()
+      const hari = days[dayOfTheWeek]
+      text = text + ` (${hari})`
+    }
+
+    return { option: text }
+  }) : []
   const [mustSpin, setMustSpin] = useState(false)
   const [prizeNumber, setPrizeNumber] = useState(0)
   const [startingOptionIndex, setStartingOptionIndex] = useState(0)
   const [isDialogOpen, setIsDialogOpen] = useState(false)
-  const { winners, addWinner } = useWinners(squad)
+  const backgroundColors = teams?.map((team, index) => {
+    if (isWinners && isWinners[index]) {
+      return 'grey'
+    }
+
+    return '#0066cc'
+  })
+
+  function getRandomDataIndex() {
+    let teamsIndexes = teams?.map((_, index) => index)
+
+    if (isWinners) {
+      teamsIndexes = teamsIndexes?.filter((_, index) => !isWinners[index])
+    }
+
+    if (!teamsIndexes) {
+      return 0
+    }
+
+    const index = Math.floor(Math.random() * teamsIndexes?.length)
+
+    return teamsIndexes[index]
+  }
 
   useEffect(() => {
-    const newStartingOptionIndex = Math.floor(Math.random() * data.length)
+    const newStartingOptionIndex = getRandomDataIndex()
     setStartingOptionIndex(newStartingOptionIndex)
   }, [])
 
   function handleSpinClick() {
     if (!mustSpin) {
-      const newPrizeNumber = Math.floor(Math.random() * data.length)
+      const newPrizeNumber = getRandomDataIndex()
       setPrizeNumber(newPrizeNumber)
+
       setMustSpin(true)
     }
+  }
+
+  function handleResetClick() {
+    resetWinners(squad)
   }
 
   function handleAcceptPrize() {
@@ -41,14 +78,20 @@ export default function Spinner({ teams, squad }: { teams?: string[], squad: str
     if (luckyPerson && squad) {
       addWinner(luckyPerson, squad)
     }
+
+    if (notWinnersName?.length === 2) {
+      const lastPerson = notWinnersName?.find(team => team !== luckyPerson)
+      if (lastPerson) {
+        addWinner(lastPerson, squad, true)
+      }
+    }
   }
 
   function handleSpinAgain() {
     setIsDialogOpen(false)
     setStartingOptionIndex(prizeNumber)
-    const newPrizeNumber = Math.floor(Math.random() * data.length)
-    setPrizeNumber(newPrizeNumber)
-    setMustSpin(true)
+
+    handleSpinClick()
   }
 
   function handleOpenChange(value: boolean) {
@@ -63,28 +106,35 @@ export default function Spinner({ teams, squad }: { teams?: string[], squad: str
         data={data}
         spinDuration={0.5}
         startingOptionIndex={startingOptionIndex}
-        backgroundColors={colors}
+        backgroundColors={backgroundColors}
+        outerBorderWidth={2}
+        radiusLineWidth={2}
         textColors={['#ffffff']}
+        fontSize={15}
         onStopSpinning={() => {
           setMustSpin(false)
           setIsDialogOpen(true)
         }}
       />
-      <Button className="w-[150px] mt-6" onClick={handleSpinClick}>Spin</Button>
-      <Dialog open={isDialogOpen} onOpenChange={handleOpenChange}>
-        <DialogContent>
-          <DialogHeader>
-            <DialogTitle>Congrats {teams ? teams[prizeNumber] : ''}!</DialogTitle>
-            <DialogDescription>
-              You are the lucky person of the day
-            </DialogDescription>
-          </DialogHeader>
-          <DialogFooter>
-            <Button variant="destructive" onClick={handleSpinAgain}>No, spin again</Button>
-            <Button onClick={handleAcceptPrize}>Accept</Button>
-          </DialogFooter>
-        </DialogContent>
-      </Dialog>
+      {isAllWon ? (
+        <Button 
+          className="w-[150px] mt-6" 
+          onClick={handleResetClick}
+        >Reset</Button>
+      ) : (
+        <Button 
+          className="w-[150px] mt-6" 
+          onClick={handleSpinClick}
+          disabled={mustSpin}
+        >Spin</Button>
+      )}
+      <WinningDialog 
+        isOpen={isDialogOpen}
+        name={teams ? teams[prizeNumber] : ''}
+        onOpenChange={handleOpenChange}
+        onAcceptPrize={handleAcceptPrize}
+        onSpinAgain={handleSpinAgain}
+      />
     </>
   )
 }
