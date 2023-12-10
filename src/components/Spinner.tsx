@@ -6,6 +6,7 @@ import { Wheel } from 'react-custom-roulette'
 import { useWinners } from "@/models/winners"
 import { days } from "@/constants/days"
 import WinningDialog from "./WinningDialog"
+import { DateTime } from "luxon"
 
 export default function Spinner({ teams, squad }: { teams?: string[], squad: string }) {
   const { winners, addWinner, resetWinners } = useWinners(squad)
@@ -68,7 +69,7 @@ export default function Spinner({ teams, squad }: { teams?: string[], squad: str
   }
 
   function handleResetClick() {
-    resetWinners(squad)
+    resetWinners()
   }
 
   function handleAcceptPrize() {
@@ -76,13 +77,19 @@ export default function Spinner({ teams, squad }: { teams?: string[], squad: str
     const luckyPerson = teams ? teams[prizeNumber] : null
 
     if (luckyPerson && squad) {
-      addWinner(luckyPerson, squad)
+      addWinner(luckyPerson)
     }
 
     if (notWinnersName?.length === 2) {
       const lastPerson = notWinnersName?.find(team => team !== luckyPerson)
       if (lastPerson) {
-        addWinner(lastPerson, squad, true)
+        const today = DateTime.now()
+        let tomorrow = today
+        if (tomorrow.weekday > 4) {
+          tomorrow = tomorrow.plus({ days: 8 - tomorrow.weekday})
+        }
+        
+        addWinner(lastPerson, tomorrow)
       }
     }
   }
@@ -118,12 +125,12 @@ export default function Spinner({ teams, squad }: { teams?: string[], squad: str
       />
       {isAllWon ? (
         <Button 
-          className="w-[150px] mt-6" 
+          className="w-[150px] my-6" 
           onClick={handleResetClick}
         >Reset</Button>
       ) : (
         <Button 
-          className="w-[150px] mt-6" 
+          className="w-[150px] my-6" 
           onClick={handleSpinClick}
           disabled={mustSpin}
         >Spin</Button>

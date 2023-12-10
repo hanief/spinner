@@ -31,10 +31,9 @@ export async function getWinnersFromSquad(squad: string) {
   return teams
 }
 
-export async function addWinnerFromSquad(person: string, squad: string) {
+export async function addWinnerFromSquad(person: string, squad: string, date?: string | null) {
   const db = await getDB()
-  const today = Date()
-  db.data.winners.push({ name: person, date: today, squad: squad })
+  db.data.winners.push({ name: person, date: date || Date(), squad: squad })
 
   await db.write()
 }

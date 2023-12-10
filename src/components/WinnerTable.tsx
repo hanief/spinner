@@ -24,6 +24,7 @@ export default function WinnerTable({ user, squad }: { user?: User, squad: strin
       <TableHeader>
         <TableRow className="border">
           <TableHead>Yang beruntung</TableHead>
+          <TableHead>Tanggal Undian</TableHead>
           <TableHead>Giliran hari</TableHead>
           {isUserAdmin && <TableHead>Aksi</TableHead>}
         </TableRow>
@@ -37,10 +38,11 @@ export default function WinnerTable({ user, squad }: { user?: User, squad: strin
           return (
             <TableRow key={winner.date}>
               <TableCell>{winner.name}</TableCell>
+              <TableCell>{date.toDateString()}</TableCell>
               <TableCell>{hari}</TableCell>
               {isUserAdmin && 
                 <TableCell>
-                  <Button variant="destructive" onClick={() => deleteWinner(winner.name, winner.squad)}>Delete</Button>
+                  <Button variant="destructive" onClick={() => deleteWinner(winner.name)}>Delete</Button>
                 </TableCell>
               }
             </TableRow>

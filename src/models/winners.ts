@@ -10,13 +10,11 @@ export function useWinners(squad: string) {
     return winners.sort((a, b) => a.date > b.date ? -1 : 1)
   })
 
-  async function addWinner(winner: string, squad: string, forTomorrow = false) {
-    const today = DateTime.now()
-    let tomorrow = today
-    if (tomorrow.weekday > 4) {
-      tomorrow = tomorrow.plus({ days: 8 - tomorrow.weekday})
+  async function addWinner(winner: string, date?: DateTime) {
+    let dateString = date?.toISO()
+    if (!dateString) {
+      dateString = DateTime.now().toISO()
     }
-    const date = forTomorrow ? tomorrow : today
     
     let newData: Winner[] = []
 
@@ -24,11 +22,11 @@ export function useWinners(squad: string) {
       newData = data
     }
 
-    newData = [...newData, { name: winner, date: date.toISO(), squad: squad }]
+    newData = [...newData, { name: winner, date: dateString, squad: squad }]
 
     return mutate(
       async () => {
-        await addWinnerFromSquad(winner, squad)
+        await addWinnerFromSquad(winner, squad, dateString)
 
         return newData
       },
@@ -38,7 +36,7 @@ export function useWinners(squad: string) {
     )
   }
 
-  async function deleteWinner(winner: string, squad: string) {
+  async function deleteWinner(winner: string) {
     const newData = data?.filter(datum => datum.name !== winner)
 
     return mutate(
@@ -53,7 +51,7 @@ export function useWinners(squad: string) {
     )
   }
 
-  async function resetWinners(squad: string) {
+  async function resetWinners() {
     const newData: Winner[] = []
 
     return mutate(

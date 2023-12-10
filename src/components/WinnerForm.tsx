@@ -1,3 +1,5 @@
+"use client"
+
 import * as z from "zod"
 import { zodResolver } from "@hookform/resolvers/zod"
 import { useForm } from "react-hook-form"
@@ -5,71 +7,85 @@ import { Button } from "@/components/ui/button"
 import {
   Form,
   FormControl,
-  FormDescription,
   FormField,
   FormItem,
-  FormLabel,
   FormMessage,
 } from "@/components/ui/form"
 import { Input } from "@/components/ui/input"
-import { Select } from "./ui/select"
+import { 
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger, 
+  SelectValue
+} from "@/components/ui/select"
+import { useWinners } from "@/models/winners"
+import { DateTime } from "luxon"
 
 const formSchema = z.object({
   name: z.string(),
-  date: z.date()
+  date: z.string()
 })
 
-export default function WinnerForm({ teams }: { teams?: string[] }) {
+export default function WinnerForm({ teams, squad }: { teams?: string[], squad: string }) {
+  const { addWinner } = useWinners(squad)
+
   const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
     defaultValues: {
-      name: ""
+      name: "",
+      date: ""
     },
   })
  
   // 2. Define a submit handler.
   function onSubmit(values: z.infer<typeof formSchema>) {
-    // Do something with the form values.
-    // ✅ This will be type-safe and validated.
-    console.log(values)
+    const { name, date } = values
+    const datetime = DateTime.fromISO(date)
+    addWinner(name, datetime)
   }
 
   return (
     <Form {...form}>
-      <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-8 flex justify-between">
+      <form onSubmit={form.handleSubmit(onSubmit)} className="flex items-center justify-between gap-2">
         <FormField
           control={form.control}
           name="name"
           render={({ field }) => (
             <FormItem>
-              <FormLabel>Name</FormLabel>
               <FormControl>
-                <Input placeholder="shadcn" {...field} />
+                <Select
+                  value={field.value}
+                  onValueChange={value => field.onChange({ target: { name, value } })}
+                  name={field.name}
+                  disabled={field.disabled}>
+                  <SelectTrigger ref={field.ref}>
+                    <SelectValue placeholder="Select Name"></SelectValue>
+                  </SelectTrigger>
+                  <SelectContent>
+                    {teams?.map(team => 
+                      <SelectItem key={team} value={team}>{team}</SelectItem>
+                    )}
+                  </SelectContent>
+                </Select>
               </FormControl>
-              <FormDescription>
-                This is your public display name.
-              </FormDescription>
               <FormMessage />
             </FormItem>
           )}
         />        
         <FormField
           control={form.control}
-          name="name"
+          name="date"
           render={({ field }) => (
             <FormItem>
-              <FormLabel>Username</FormLabel>
               <FormControl>
-                <Input placeholder="shadcn" {...field} />
+                <Input placeholder="date" type="date" {...field} />
               </FormControl>
-              <FormDescription>
-                This is your public display name.
-              </FormDescription>
               <FormMessage />
             </FormItem>
           )}
         />
-        <Button type="submit">Submit</Button>
+        <Button type="submit">Add</Button>
       </form>
     </Form>
   )
