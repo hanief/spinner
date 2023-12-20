@@ -13,21 +13,21 @@ export const squads = [
       'Andre'
     ]
   },
-  // {
-  //   name: 'survey',
-  //   teams: [
-  //     'Alika',
-  //     'Babay',
-  //     'Hanief',
-  //     'Yudi',
-  //     'Luthfil',
-  //     'Cipau',
-  //     'Yazid',
-  //     'Yusril',
-  //     'Yosua',
-  //     'Fia'
-  //   ]
-  // },
+  {
+    name: 'survey',
+    teams: [
+      'Alika',
+      'Babay',
+      'Hanief',
+      'Yudi',
+      'Luthfil',
+      'Cipau',
+      'Yazid',
+      'Yusril',
+      'Yosua',
+      'Fia'
+    ]
+  },
   // {
   //   name: 'apps',
   //   teams: [
