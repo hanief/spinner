@@ -6,5 +6,5 @@ export function cn(...inputs: ClassValue[]) {
 }
 
 export function isAdmin(email?: string | null) {
-  return email === 'hanief.utama@jakpat.net'
+  return email === 'hanief.utama@jakpat.net' || email === 'lusiana@jakpat.net'
 }
